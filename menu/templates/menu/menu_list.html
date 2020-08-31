@@ -1,0 +1,26 @@
+{% extends "menu/layout.html" %}
+{% block title %}
+소환사 정보
+{% endblock %}
+
+{% block content %}
+	<style>
+         #img1 { 
+         		position: absolute;
+         		left: 50% right: 50%;
+         		margin-left:120px;
+         		margin-top: 50px;
+         	}
+         #img2 { 
+         		position: absolute;
+         		left: 50% right: 50%;
+         		margin-left:650px;
+         		margin-top: 50px;
+         	}
+    </style>
+        <p>메인 페이지</p>
+        {% load static %}
+        <img id= 'img1' src = "{% static 'menu/티모.jpg' %}"  alt = "티모" width="500" height="500">
+        <img id= 'img2' src = "{% static 'menu/다리우스.jpg' %}" alt = "다리우스" width="500" height="500">
+       
+{% endblock %} 

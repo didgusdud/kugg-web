@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <style>
+        body { margin: 0 auto; width: 960px;}
+       
+        #title { font-size: 32px; }
+    </style>
+	<link rel="shortcut icon" type="image/png" href="{% static 'elections/favicon.ico' %}" />
+	  <link rel="icon" sizes="16x16 32x32 64x64" href="{% static 'menu/favicon.ico' %}"/>
+	  <title>{% block title %}{% endblock %}</title>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+	<body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a id="title" class="navbar-brand" href="{% url 'menu_list' %}">KUGG</a>
+        </div>
+            <a href="{% url 'champion_list' %}">챔피언 분석</a>
+        
+            <a href="{% url 'object_list' %}">오브젝트 분석</a>
+
+            <form class="form-inline my-2 ,my-1g-0" action="{% url 'info_list' %}" method='GET'>
+                    {%csrf_token %}
+                    소환사명 검색: <input class="form-control mr-sm-2" type='search' name='query'>
+                    <input class="btn btn-secondary my-2 my-sm-0" type='submit' value='검색'>
+            </form> 
+        </nav>
+        <div class="container">
+        	  
+                 
+        </div> 
+            
+
+        {% block content %}{% endblock %}
+    </body>
+</html>
