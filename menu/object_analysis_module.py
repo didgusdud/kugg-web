@@ -10,7 +10,7 @@ import numpy as np
 class ObjectAnalysis:
     def __init__(self, first_object_model=None, object_kills_model=None, object_killsAnd_first_model=None):
         # ObjectAnalysis.py in kugg-web/menu/
-        self.model_dic_path = "./"
+        self.model_dic_path = "./static/analysis_models/"
         self.first_object_model=None
         self.object_kills_model=None
         self.object_killsAnd_first_model=None
