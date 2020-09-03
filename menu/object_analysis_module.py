@@ -21,19 +21,19 @@ class ObjectAnalysis:
     # parameter = pickle file
     def update_model(self, object_model):
         if object_model == "first_object_model":
-            model_path = self.model_dic_path+"model1.pkl"
+            model_path = self.model_dic_path+"dt_model1.pkl"
             with open(model_path, 'rb') as file:
                 self.first_object_model = pickle.load(file)
                 return 1
             
         elif object_model == "object_kills_model":
-            model_path = self.model_dic_path+"model2.pkl"
+            model_path = self.model_dic_path+"dt_model2.pkl"
             with open(model_path, 'rb') as file:
                 self.object_kills_model = pickle.load(file)
                 return 2
                 
         elif object_model == "object_killsAnd_first_model":
-            model_path = self.model_dic_path+"model3.pkl"
+            model_path = self.model_dic_path+"dt_model3.pkl"
             with open(model_path, 'rb') as file:
                 self.object_killsAnd_first_model = pickle.load(file)
                 return 3
@@ -44,7 +44,7 @@ class ObjectAnalysis:
     def first_object_predict(self, fdragon, fharry, fblood, ftower,
                              fbaron, finhib):
         predict_array = self.first_object_model.predict_proba(
-            np.array[fdragon, fharry, fblood, ftower, fbaron, finhib].reshape(1, -1))
+            np.array[fblood, finhib, ftower, fharry, fdragon, fbaron].reshape(1, -1))
         
         # ex. 0.641095145921092....
         return predict_array[0][1]
@@ -52,8 +52,8 @@ class ObjectAnalysis:
     def object_kills_predict(self, dragonkills, baronkills, inhibkills,
                              harrykills, towerkills):
         predict_array = self.object_kills_model.predict_proba(
-            np.array[dragonkills, baronkills, inhibkills, harrykills,
-                     towerkills].reshape(1, -1))
+            np.array[harrykills, inhibkills, towerkills, baronkills,
+                     dragonkills].reshape(1, -1))
         
         # ex. 0.124412512451231....
         return predict_array[0][1]
@@ -62,7 +62,7 @@ class ObjectAnalysis:
                                     finhib, dragonkills, baronkills, inhibkills,
                                     harrykills, towerkills):
         predict_array = predict_array = self.object_kills_model.predict_proba(
-            np.array[fdragon, fharry, fblood, ftower, fbaron, finhib, dragonkills,
-                     baronkills, inhibkills, harrykills, towerkills].reshape(1, -1))
+            np.array[harrykills, fharry, inhibkills, fblood, towerkills, dragonkills, baronkills,
+                     finhib, fdragon, fbaron, ftower].reshape(1, -1))
         
         return predict_array[0][1]
