@@ -44,7 +44,7 @@ class ObjectAnalysis:
     def first_object_predict(self, fdragon, fharry, fblood, ftower,
                              fbaron, finhib):
         predict_array = self.first_object_model.predict_proba(
-            np.array[fblood, finhib, ftower, fharry, fdragon, fbaron].reshape(1, -1))
+            np.array([fblood, finhib, ftower, fharry, fdragon, fbaron]).reshape(1, -1))
         
         # ex. 0.641095145921092....
         return predict_array[0][1]
@@ -52,8 +52,8 @@ class ObjectAnalysis:
     def object_kills_predict(self, dragonkills, baronkills, inhibkills,
                              harrykills, towerkills):
         predict_array = self.object_kills_model.predict_proba(
-            np.array[harrykills, inhibkills, towerkills, baronkills,
-                     dragonkills].reshape(1, -1))
+            np.array([harrykills, inhibkills, towerkills, baronkills,
+                     dragonkills]).reshape(1, -1))
         
         # ex. 0.124412512451231....
         return predict_array[0][1]
@@ -62,7 +62,7 @@ class ObjectAnalysis:
                                     finhib, dragonkills, baronkills, inhibkills,
                                     harrykills, towerkills):
         predict_array = predict_array = self.object_kills_model.predict_proba(
-            np.array[harrykills, fharry, inhibkills, fblood, towerkills, dragonkills, baronkills,
-                     finhib, fdragon, fbaron, ftower].reshape(1, -1))
+            np.array([harrykills, fharry, inhibkills, fblood, towerkills, dragonkills, baronkills,
+                     finhib, fdragon, fbaron, ftower]).reshape(1, -1))
         
         return predict_array[0][1]
