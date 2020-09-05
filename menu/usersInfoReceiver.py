@@ -66,4 +66,4 @@ class UsersInfoReceiver:
         return usersInfo_df_after
     
     def run(self, usersLeague_df):
-        self.request_usersInfo(usersLeague_df)
+        return self.request_usersInfo(usersLeague_df)
