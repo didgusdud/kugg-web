@@ -23,6 +23,7 @@ class MatchInfoReceiver:
     def request_matchInfo(self, unique_gameId):
         loop = 0
         flag= False
+        total_length = len(unique_gameId)
 
         while True:
             get_matchInfo = "https://kr.api.riotgames.com/lol/match/v4/matches/"+ \
@@ -55,11 +56,8 @@ class MatchInfoReceiver:
                 logging.info(str(unique_gameId[loop])+" to csv, beginIdex= "+str(datetime.today()))
             
             loop +=1
-            
-            if loop==len(unique_gameId):
+            if loop==total_length:
                 break
         
     def run(self, unique_gameId):
         self.request_matchInfo(unique_gameId)
-
-        
