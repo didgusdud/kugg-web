@@ -33,10 +33,9 @@ class UsersInfoReceiver:
         
         while True:
             try:
-                get_summoner_api = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/" + \
-                    series_entries[loop]["summonerId"]+"?api_key="+self.API_KEY
+                get_summoner_api = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/" + series_entries[loop]["summonerId"]+"?api_key="+self.API_KEY
                 r_get_summoner = requests.get(get_summoner_api)
-            except IndexError:
+            except KeyError:
                 break
             
             # request time out

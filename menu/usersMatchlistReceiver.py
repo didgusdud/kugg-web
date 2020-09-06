@@ -85,4 +85,4 @@ class UsersMatchlistReceiver:
     #     self.request_usersMatchlist(usersInfo_df)
         
     def run(self, usersInfo_df):
-        return request_usersMatchlist(usersInfo_df)
+        return self.request_usersMatchlist(usersInfo_df)
