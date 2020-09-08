@@ -26,6 +26,41 @@ class UsersInfoReceiver:
     
         return df_userInfo
     
+    # need test
+    # def request_usersInfo(self, summonerId_array):
+    #     flag = False
+    #     loop = 0
+        
+    #     while True:
+    #         try:
+    #             get_summoner_api = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/" + summonerId_array[loop]+"?api_key="+self.API_KEY
+    #             r_get_summoner = requests.get(get_summoner_api)
+    #         except KeyError:
+    #             break
+    #         except IndexError:
+    #             break
+            
+    #         # request time out
+    #         if r_get_summoner.status_code == 429:
+    #             logging.warning(str(loop)+" time exceed")
+    #             time.sleep(30)
+    #             continue
+    #         elif r_get_summoner.status_code != 200:
+    #             logging.error("status code = "+str(r_get_summoner.status_code))
+    #             time.sleep(10)
+    #             continue
+            
+    #         if not flag:
+    #             flag = True
+    #             usersInfo_df_after = self.make_usersInfo_df(r_get_summoner)
+    #         else:
+    #             usersInfo_df = self.make_usersInfo_df(r_get_summoner)
+    #             usersInfo_df_after = pd.concat([usersInfo_df_after, usersInfo_df], axis=0).reset_index(drop=True)
+            
+    #         loop += 1
+            
+    #     return usersInfo_df_after.reset_index(drop=True)
+    
     def request_usersInfo(self, usersLeague_df):
         flag = False
         loop = 0
@@ -66,3 +101,7 @@ class UsersInfoReceiver:
     
     def run(self, usersLeague_df):
         return self.request_usersInfo(usersLeague_df)
+    
+    # need test
+    # def run(self, summonerId_array):
+    #     return self.request_usersInfo(summonerId_array)

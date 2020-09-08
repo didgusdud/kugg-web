@@ -56,6 +56,37 @@ class DBController:
                              usersLeague_df[usersLeague_df["summonerId"]==summonerId].astype(str).values[0])
             
         self.conn.commit()
-        self.conn.close()
+        # self.conn.close()
+        
+        # extract summonerId from usersLeague for request usersInfo
+        def from_usersLeague_for_usersInfo_summonerId(self, usersLeague_df):
+            delete_usersInfo_sql = "DELETE FROM usersInfo WHERE summonerId=?"
+            self.cur.execute("SELECT * FROM usersInfo")
             
-        return usersLeague_df
+            request_usersLeague_summonerId = usersLeague_df["summonerId"].values
+            residual_summonerId = copy.deepcopy(request_usersLeague_summonerId)
+                 
+            for row in self.cur.fetchall():
+                residual_summonerId = np.delete(residual_summonerId, np.argwhere(residual_summonerId==row[0]))
+                if row[0] in request_usersLeague_summonerId:
+                    pass
+                # is in DB, but not in latest usersLeague --> need delete
+                else:
+                    self.cur.execute(delete_usersInfo_sql, (row[0], ))
+                
+            self.conn.commit()
+            
+            return residual_summonerId
+        
+        
+        """
+        In usersInfo part, did not implement update sql because of too much request
+        """
+        def update_usersInfo(self, usersInfo_df):
+            # id, accountId, puuid, name, profileIconId, revesionDate, summonerLevel
+            insert_usersInfo_sql = "INSERT INTO usersInfo VALUES (?, ?, ?, ?, ?, ?, ?)"
+                
+            for row in usersInfo_df.values:
+                self.cur.execute(insert_usersInfo_sql, row.astype(str).tolist())
+                
+            self.conn.commit()

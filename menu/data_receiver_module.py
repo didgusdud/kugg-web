@@ -41,12 +41,16 @@ class DataReceiver:
         
     def run(self):
         # for i in range(5):
+        #     """test complete"""
         #     usersLeague_df = self.usersLeague_receiver.run()
-        #     print("usersLeague complete   "+str(i))   
-        #     tmp = self.database_controller.update_usersLeague(usersLeague_df)
-        #     print(len(tmp))
+        #     self.database_controller.update_usersLeague(usersLeague_df)
             
-
+        #     """not test"""
+        #     summonerId_array = self.database_controller.from_usersLeague_for_usersInfo_summonerId(usersLeague_df)
+        #     usersInfo_df = self.usersInfo_receiver.run(summonerId_array)
+        #     self.database_controller.update_usersInfo(usersInfo_df)
+            
+        # default code
         usersLeague_df = self.usersLeague_receiver.run()
         print("usersLeague complete")   
         usersInfo_df = self.usersInfo_receiver.run(usersLeague_df)
