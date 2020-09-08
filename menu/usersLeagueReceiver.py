@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import time
 import logging
+import ast
 from datetime import datetime
 
 logging.basicConfig(filename="./usersLeagueReceiver "+datetime.today().strftime("%Y-%m-%d")+".log", level=logging.INFO)
@@ -33,14 +34,34 @@ class UsersLeagueReceiver:
     
         return df_league_userInfo
 
+    def merge_entries(self, usersLeague_df):
+        flag=False
+
+        for entry in usersLeague_df["entries"]:
+            if not flag:
+                flag = True
+                entry_df = pd.DataFrame.from_dict([entry])
+            else:
+                entry_df_after = pd.DataFrame.from_dict([entry])
+                entry_df = entry_df.append(entry_df_after)
+                
+        entry_df.reset_index(drop=True, inplace=True)
+        usersLeague_df.drop("entries", axis=1, inplace=True)
+        
+        return usersLeague_df.merge(entry_df, left_index=True, right_index=True)
+
     def request_usersLeague(self):
         flag = False
+        tier_idx = 0
         
-        for t in self.tiers:
-            get_league_api = "https://kr.api.riotgames.com/lol/league/v4/"+t+"/by-queue/RANKED_SOLO_5x5?api_key="+self.API_KEY
-            r_get_league = requests.get(get_league_api)
-            # print(t, d, page, r_get_league)
-            logging.info(t+" "+str(r_get_league.status_code))
+        while True:
+            try:
+                get_league_api = "https://kr.api.riotgames.com/lol/league/v4/"+self.tiers[tier_idx]+"/by-queue/RANKED_SOLO_5x5?api_key="+self.API_KEY
+                r_get_league = requests.get(get_league_api)
+                # print(t, d, page, r_get_league)
+                logging.info(str(tier_idx)+" "+str(r_get_league.status_code))
+            except IndexError:
+                break
             
             # request 시간 초과
             if r_get_league.status_code == 429:
@@ -60,7 +81,10 @@ class UsersLeagueReceiver:
             else:
                 usersLeague_df = self.make_usersLeague_df(r_get_league)
                 usersLeague_df_after = pd.concat([usersLeague_df_after, usersLeague_df], axis=0).reset_index(drop=True)
-
+            
+            tier_idx+=1
+            
+        usersLeague_df_after = self.merge_entries(usersLeague_df_after)
         usersLeague_df_after.to_csv(self.csv_name, mode="a", header=False)
         # logging.info(str(page)+str(datetime.today()))
                 
@@ -68,3 +92,6 @@ class UsersLeagueReceiver:
     
     def run(self):
         return self.request_usersLeague()
+    
+    # def rerun(self, usersLeague_df):
+        

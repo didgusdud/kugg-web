@@ -4,15 +4,16 @@ Created on Thu Sep  3 21:49:15 2020
 
 @author: 6794c
 """
+import pandas as pd
+
 import usersLeagueReceiver
 import usersInfoReceiver
 import usersMatchlistReceiver
 import matchInfoReceiver
 import matchTimelineReceiver
-import pandas as pd
+import db_controller
 
 # input your api key when you need
-
 class DataReceiver:
     def __init__(self):
         self.API_KEY = None
@@ -22,6 +23,7 @@ class DataReceiver:
         self.matchInfo_csv_name = "matchInfo.csv"
         self.matchTimeline_csv_name = "matchTimeline.csv"
         
+        print("loading receiver")
         self.usersLeague_receiver = usersLeagueReceiver.UsersLeagueReceiver(
             self.API_KEY, self.usersLeague_csv_name)
         self.usersInfo_receiver = usersInfoReceiver.UsersInfoReceiver(
@@ -33,9 +35,20 @@ class DataReceiver:
         self.matchTimeline_receiver = matchTimelineReceiver.MatchTimelineReceiver(
             self.API_KEY, self.matchTimeline_csv_name)
         
+        print("check DB connection")
+        self.database_controller = db_controller.DBController()
+        
+        
     def run(self):
+        # for i in range(5):
+        #     usersLeague_df = self.usersLeague_receiver.run()
+        #     print("usersLeague complete   "+str(i))   
+        #     tmp = self.database_controller.update_usersLeague(usersLeague_df)
+        #     print(len(tmp))
+            
+
         usersLeague_df = self.usersLeague_receiver.run()
-        print("usersLeague complete")        
+        print("usersLeague complete")   
         usersInfo_df = self.usersInfo_receiver.run(usersLeague_df)
         print("usersInfo complete")
         usersMatchlist_df = self.usersMatchlist_receiver.run(usersInfo_df)
@@ -55,6 +68,7 @@ class DataReceiver:
 
     def unique_matchList(self, usersMatchlist_df):
         return usersMatchlist_df["gameId"].unique()
+    
         
 datareceiver = DataReceiver()
 datareceiver.run()
