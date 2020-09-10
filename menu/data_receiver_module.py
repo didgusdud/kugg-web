@@ -53,8 +53,12 @@ class DataReceiver:
         #     usersMatchlist_df = self.usersMatchlist_receiver.run(self.database_controller.load_usersInfo_fromDB())
         #     self.db_controller.update_usersMatchlist(usersMatchlist_df)
             
-        #     matchInfo_df = self.matchInfo_receiver.run(self.unique_matchList(usersMatchlist_df))
+        #     unique_gameId = self.unique_matchList(usersMatchlist_df)
+        #     matchInfo_df = self.matchInfo_receiver.run(unique_gameId)
         #     self.db_controller.update_matchInfo(matchInfo_df)
+            
+        #     matchTimeline_df = self.matchTimeline_receiver.run(unique_gameId)
+        #     self.db_controller.update_matchTimeline(matchTimeline_df)
 
         # default code
         usersLeague_df = self.usersLeague_receiver.run()

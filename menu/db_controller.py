@@ -120,5 +120,22 @@ class DBController:
                 
             self.conn.commit()
             
+        """matchInfo, matchTimeline method only excute insert function"""
         def update_matchInfo(self, matchInfo_df):
+            insert_matchInfo_sql = "INSERT INTO matchInfo VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            
+            for row in matchInfo_df.values:
+                try:
+                    self.cur.execute(insert_matchInfo_sql, row)
+                except IntegrityError:
+                    pass
+                
+        def update_matchTimeline(self, matchTimeline_df):
+            insert_matchTimeline_sql = "INSERT INTO matchTimeline VALUES (?, ?, ?)"
+            
+            for row in matchTimeline_df:
+                try:
+                    self.cur.execute(insert_matchTimeline_sql, row)
+                except IntegrityError:
+                    pass
             
