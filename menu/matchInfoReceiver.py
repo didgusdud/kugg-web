@@ -52,12 +52,16 @@ class MatchInfoReceiver:
     
             # find all matches
             if loop%100==99:
+                flag = False
                 users_matchInfo_df_after.to_csv(self.csv_name, mode="a", header=False)
                 logging.info(str(unique_gameId[loop])+" to csv, beginIdex= "+str(datetime.today()))
             
             loop +=1
             if loop==total_length:
                 break
+        
+        # for database receiver
+        # return users_matchInfo_df_after
         
     def run(self, unique_gameId):
         self.request_matchInfo(unique_gameId)

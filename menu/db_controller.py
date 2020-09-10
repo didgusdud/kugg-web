@@ -7,6 +7,7 @@ Created on Tue Sep  8 14:38:24 2020
 import sqlite3
 import copy
 import numpy as np
+import pandas as pd
 
 class DBController:
     def __init__(self):
@@ -61,7 +62,8 @@ class DBController:
         # extract summonerId from usersLeague for request usersInfo
         def from_usersLeague_for_usersInfo_summonerId(self, usersLeague_df):
             delete_usersInfo_sql = "DELETE FROM usersInfo WHERE summonerId=?"
-            self.cur.execute("SELECT * FROM usersInfo")
+            select_usersInfo_sql = "SELECT * FROM usersInfo"
+            self.cur.execute(select_usersInfo_sql)
             
             request_usersLeague_summonerId = usersLeague_df["summonerId"].values
             residual_summonerId = copy.deepcopy(request_usersLeague_summonerId)
@@ -80,13 +82,43 @@ class DBController:
         
         
         """
-        In usersInfo part, did not implement update sql because of too much request
+        In usersInfo part, did not implement update sql because of too much requestt
         """
         def update_usersInfo(self, usersInfo_df):
             # id, accountId, puuid, name, profileIconId, revesionDate, summonerLevel
-            insert_usersInfo_sql = "INSERT INTO usersInfo VALUES (?, ?, ?, ?, ?, ?, ?)"
+            insert_usersInfo_sql = "INSERT INTO usersInfo VALUES (?, ?, ?, ?, ?, None, ?)"
                 
             for row in usersInfo_df.values:
                 self.cur.execute(insert_usersInfo_sql, row.astype(str).tolist())
                 
             self.conn.commit()
+            
+        def load_usersInfo_fromDB(self):
+            select_usersInfo_sql = "SELECT accountId, revisionDate FROM usersInfo"
+            
+            usersInfo_df = pd.read_sql_query(select_usersInfo_sql, self.conn)
+            
+            return usersInfo_df
+        
+        # only given new matchlist.
+        # insert new matchlist data to matchlistDB and update and update usersInfo revisionDate column
+        def update_usersMatchlist(self, usersMatchlist_df):
+            # index, platformId, gameId, champion, queue, season, (begin)timestamp, role, lane, accountId
+            insert_usersMatchlist_sql = "INSERT INTO usersInfo VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            update_usersInfo_sql = "UPDATE usersInfo SET revisionDate=? WHERE accountId=?"
+            
+            before_account = "iniail_account"  # row[-1]
+            recent_timestamp = 100 # row[5]
+            for row in usersMatchlist_df.values:
+                self.cur.execute(insert_usersMatchlist_sql, row.astype(str).tolist())
+                if row[-1] != before_account:
+                    before_account = row[-1]
+                    recent_timestamp = row[5]
+                    
+                    # update usersInfo revisionDate 
+                    self.cur.execute(update_usersInfo_sql, [recent_timestamp, before_account])
+                
+            self.conn.commit()
+            
+        def update_matchInfo(self, matchInfo_df):
+            

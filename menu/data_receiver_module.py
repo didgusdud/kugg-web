@@ -44,12 +44,18 @@ class DataReceiver:
         #     """test complete"""
         #     usersLeague_df = self.usersLeague_receiver.run()
         #     self.database_controller.update_usersLeague(usersLeague_df)
-            
+
         #     """not test"""
         #     summonerId_array = self.database_controller.from_usersLeague_for_usersInfo_summonerId(usersLeague_df)
         #     usersInfo_df = self.usersInfo_receiver.run(summonerId_array)
         #     self.database_controller.update_usersInfo(usersInfo_df)
+
+        #     usersMatchlist_df = self.usersMatchlist_receiver.run(self.database_controller.load_usersInfo_fromDB())
+        #     self.db_controller.update_usersMatchlist(usersMatchlist_df)
             
+        #     matchInfo_df = self.matchInfo_receiver.run(self.unique_matchList(usersMatchlist_df))
+        #     self.db_controller.update_matchInfo(matchInfo_df)
+
         # default code
         usersLeague_df = self.usersLeague_receiver.run()
         print("usersLeague complete")   
@@ -62,7 +68,7 @@ class DataReceiver:
         print("matchInfo complete")
         self.matchTimeline_receiver.run(unique_gameId)
         print("matchTimeline complete")
-        
+
         # usersMatchlist_df = pd.read_csv("usersMatchlist.csv")
         # columns_df = pd.read_csv("columnsInfo_web.csv")
         # columns_list = columns_df[~columns_df["usersMatchlist"].isna()]["usersMatchlist"]
@@ -73,6 +79,5 @@ class DataReceiver:
     def unique_matchList(self, usersMatchlist_df):
         return usersMatchlist_df["gameId"].unique()
     
-        
 datareceiver = DataReceiver()
 datareceiver.run()
